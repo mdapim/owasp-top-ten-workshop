@@ -21,6 +21,19 @@ const schema = {
 export default async function register(fastify) {
   fastify.post('/register', { schema }, async req => {
     const { username, password } = req.body
+
+    const {
+      rows: [foundPassword]
+    } = await fastify.pg.query(
+      SQL`SELECT * FROM dataBreachRecords WHERE password = ${password}`
+    )
+
+    if (foundPassword) {
+      throw errors.BadRequest(
+        `You are trying to use password that is known to be exposed in data breaches: ${foundPassword.source}. Use a different one. Read more here: https://haveibeenpwned.com/Passwords.`
+      )
+    }
+
     const age = faker.datatype.number({ min: 12, max: 85 })
     const hashedPassword = await hashPassword(password)
     const creditCardNumber = faker.finance.creditCardNumber('#'.repeat(16))

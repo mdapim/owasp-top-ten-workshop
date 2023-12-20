@@ -1,6 +1,6 @@
 import solution from './solution.js'
 import { getSolutionToExport } from 'owasp-shared/export-solution.js'
-import serialize from 'node-serialize'
+// import serialize from 'node-serialize'
 
 function profile(fastify) {
   fastify.get('/profile', req => {
@@ -8,7 +8,8 @@ function profile(fastify) {
       'ascii'
     )
 
-    const profile = serialize.unserialize(cookieAsStr)
+    // const profile = serialize.unserialize(cookieAsStr)
+    const profile = JSON.parse(cookieAsStr)
 
     if (profile.username) {
       return 'Hello ' + profile.username

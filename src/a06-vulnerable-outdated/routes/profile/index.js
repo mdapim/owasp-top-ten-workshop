@@ -1,5 +1,5 @@
 import { getSolutionToExport } from 'owasp-shared/export-solution.js'
-import { request } from 'undici-5.8.0'
+import { request } from 'undici'
 import solution from './solution.js'
 import errors from 'http-errors'
 

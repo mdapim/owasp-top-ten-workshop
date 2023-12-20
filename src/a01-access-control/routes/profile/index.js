@@ -10,10 +10,15 @@ function profile(fastify) {
       onRequest: [fastify.authenticate]
     },
     async req => {
+      const { username } = req.user
       if (!req.user) {
         throw new errors.Unauthorized()
       }
-      const { username } = req.query
+
+      if (username !== req.query.username) {
+        throw new errors.Forbidden()
+      }
+
       const {
         rows: [user]
       } = await fastify.pg.query(

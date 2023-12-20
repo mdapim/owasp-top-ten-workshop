@@ -7,5 +7,6 @@ CREATE TABLE allowedImageDomain(
 INSERT INTO allowedImageDomain (
   hostname
 ) VALUES (
-  'i.imgflip.com'
+  'i.imgflip.com',
+  'localhost:3000'
 );

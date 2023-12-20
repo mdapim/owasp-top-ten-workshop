@@ -1,6 +1,7 @@
 import solution from './solution.js'
 import { getSolutionToExport } from 'owasp-shared/export-solution.js'
 import errors from 'http-errors'
+import SQL from '@nearform/sql'
 
 async function customer(fastify) {
   fastify.get(
@@ -10,9 +11,8 @@ async function customer(fastify) {
     },
     async req => {
       const { name } = req.query
-      const { rows: customers } = await fastify.pg.query(
-        `SELECT * FROM customers WHERE name='${name}'`
-      )
+      const sql = SQL`SELECT * FROM customers WHERE name=${name}`
+      const { rows: customers } = await fastify.pg.query(sql)
       if (!customers.length) throw errors.NotFound()
       return customers
     }

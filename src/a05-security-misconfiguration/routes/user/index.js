@@ -36,17 +36,26 @@ function login(fastify) {
       throw errors.Unauthorized('Invalid Password')
     }
 
-    rep.setCookie('userId', user.id, { signed: false })
-    return 'user logged in'
+    rep
+      .setCookie('userId', `${user.id}`, {
+        path: '/profile',
+        httpOnly: true,
+        signed: true
+        // secure: true
+      })
+      .send('user logged in')
+    // return 'user logged in'
   })
 }
 
 function profile(fastify) {
   fastify.get('/profile', async req => {
-    if (!req.cookies?.userId) {
+    console.log('unsigned cookie is ', req.unsignCookie(req.cookies.userId))
+    const { valid, value } = req.unsignCookie(req.cookies.userId)
+    if (!req.cookies?.userId || !valid) {
       throw new errors.Unauthorized()
     }
-    const id = req.cookies.userId
+    const id = value
     const {
       rows: [user]
     } = await fastify.pg.query(

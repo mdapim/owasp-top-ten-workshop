@@ -1,5 +1,5 @@
 import { getSolutionToExport } from 'owasp-shared/export-solution.js'
-import { request } from 'undici-5.8.0'
+import { request } from 'undici'
 import solution from './solution.js'
 
 async function profile(fastify) {
@@ -9,6 +9,9 @@ async function profile(fastify) {
       onRequest: [fastify.authenticate]
     },
     async req => {
+      req.log.info(req.user)
+      console.log(req.user)
+      console.log(req.headers)
       const { body } = await request('http://localhost:3001', {
         method: 'GET',
         headers: {

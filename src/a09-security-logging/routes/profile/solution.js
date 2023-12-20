@@ -14,6 +14,7 @@ export default function profile(fastify) {
       })
 
       const headerCharRegex = /[^\t\x20-\x7e\x80-\xff]/
+      console.log(headerCharRegex.exec(req.headers['content-type']))
 
       if (headerCharRegex.exec(req.headers['content-type']) !== null) {
         throw errors.BadRequest()
